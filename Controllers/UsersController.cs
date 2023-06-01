@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PR_103_2019.Data;
+using PR_103_2019.Dtos;
+using PR_103_2019.Interfaces;
 using PR_103_2019.Models;
 
 namespace PR_103_2019.Controllers
@@ -15,21 +17,18 @@ namespace PR_103_2019.Controllers
     public class UsersController : ControllerBase
     {
         private readonly PR_103_2019Context _context;
+        private readonly IUserService _userService;
 
-        public UsersController(PR_103_2019Context context)
+        public UsersController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser()
+        public IActionResult GetAllUsers()
         {
-          if (_context.User == null)
-          {
-              return NotFound();
-          }
-            return await _context.User.ToListAsync();
+            return Ok(_userService.GetAllUsers());
         }
 
         // GET: api/Users/5
@@ -84,16 +83,20 @@ namespace PR_103_2019.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public IActionResult RegisterUser([FromBody]UserDto userDto)
         {
-          if (_context.User == null)
-          {
-              return Problem("Entity set 'PR_103_2019Context.User'  is null.");
-          }
-            _context.User.Add(user);
-            await _context.SaveChangesAsync();
+            UserDto user;
+            try
+            {
+                user = _userService.RegisterUser(userDto);
+            }
+            catch (Exception)
+            {
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+                throw;
+            }
+
+            return Ok(user);
         }
 
         // DELETE: api/Users/5

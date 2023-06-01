@@ -10762,11 +10762,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\FAKS\\Web2\\PR-103-2019\\PR-103-2019.csproj",
+      "projectUniqueName": "C:\\FAKS\\Web2\\PR_103_2019_Web2\\PR-103-2019.csproj",
       "projectName": "PR-103-2019",
-      "projectPath": "C:\\FAKS\\Web2\\PR-103-2019\\PR-103-2019.csproj",
+      "projectPath": "C:\\FAKS\\Web2\\PR_103_2019_Web2\\PR-103-2019.csproj",
       "packagesPath": "C:\\Users\\Nemanja\\.nuget\\packages\\",
-      "outputPath": "C:\\FAKS\\Web2\\PR-103-2019\\obj\\",
+      "outputPath": "C:\\FAKS\\Web2\\PR_103_2019_Web2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -75,6 +75,10 @@ namespace PR_103_2019.Migrations
                     b.Property<long>("BuyerId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("OrdredDate")
                         .HasColumnType("datetime2");
 
@@ -83,6 +87,9 @@ namespace PR_103_2019.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -118,6 +125,9 @@ namespace PR_103_2019.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Role")

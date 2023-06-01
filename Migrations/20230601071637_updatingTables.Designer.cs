@@ -12,8 +12,8 @@ using PR_103_2019.Data;
 namespace PR_103_2019.Migrations
 {
     [DbContext(typeof(PR_103_2019Context))]
-    [Migration("20230524203215_init")]
-    partial class init
+    [Migration("20230601071637_updatingTables")]
+    partial class updatingTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -121,6 +121,9 @@ namespace PR_103_2019.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Role")

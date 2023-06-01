@@ -1,6 +1,8 @@
-﻿namespace PR_103_2019.Models
+﻿using PR_103_2019.Models;
+
+namespace PR_103_2019.Dtos
 {
-    public class User
+    public class UserDto
     {
         public long Id { get; set; }
         public string Username { get; set; }
@@ -13,7 +15,5 @@
         public Role? Role { get; set; }
         public bool Verified { get; set; }
         public string? ProfilePicture { get; set; }
-        public List<Article> Articles { get; set; }
-        public List<Order> Orders { get; set; }
     }
 }

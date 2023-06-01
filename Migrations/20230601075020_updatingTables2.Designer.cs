@@ -12,8 +12,8 @@ using PR_103_2019.Data;
 namespace PR_103_2019.Migrations
 {
     [DbContext(typeof(PR_103_2019Context))]
-    [Migration("20230524204525_shopMigration")]
-    partial class shopMigration
+    [Migration("20230601075020_updatingTables2")]
+    partial class updatingTables2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,6 +78,10 @@ namespace PR_103_2019.Migrations
                     b.Property<long>("BuyerId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("OrdredDate")
                         .HasColumnType("datetime2");
 
@@ -86,6 +90,9 @@ namespace PR_103_2019.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -121,6 +128,9 @@ namespace PR_103_2019.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Role")

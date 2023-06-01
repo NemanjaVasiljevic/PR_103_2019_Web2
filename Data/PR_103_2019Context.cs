@@ -14,10 +14,10 @@ namespace PR_103_2019.Data
         {
         }
 
-        public DbSet<PR_103_2019.Models.User> User { get; set; } = default!;
+        public DbSet<User> User { get; set; } = default!;
 
-        public DbSet<PR_103_2019.Models.Article>? Article { get; set; }
+        public DbSet<Article>? Article { get; set; }
 
-        public DbSet<PR_103_2019.Models.Order>? Order { get; set; }
+        public DbSet<Order>? Order { get; set; }
     }
 }

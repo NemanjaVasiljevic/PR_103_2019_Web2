@@ -6,12 +6,19 @@
         USER,
         SELLER
     }
-    public enum ArticleState
+    public enum OrderState
     {
         AVAILABLE,
         RESERVED,
         SHIPPING,
         ARRIVED,
         RETURNED
+    }
+
+    public enum VerificationState
+    {
+        ACCEPTED,
+        REJECTED,
+        PENDING
     }
 }
