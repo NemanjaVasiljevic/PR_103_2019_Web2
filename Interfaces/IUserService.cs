@@ -6,5 +6,7 @@ namespace PR_103_2019.Interfaces
     {
         List<UserDto> GetAllUsers();
         UserDto RegisterUser(UserDto user);
+
+        bool DeleteUser(long id);
     }
 }

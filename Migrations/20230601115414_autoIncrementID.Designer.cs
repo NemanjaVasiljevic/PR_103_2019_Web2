@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PR_103_2019.Data;
 
@@ -11,9 +12,11 @@ using PR_103_2019.Data;
 namespace PR_103_2019.Migrations
 {
     [DbContext(typeof(PR_103_2019Context))]
-    partial class PR_103_2019ContextModelSnapshot : ModelSnapshot
+    [Migration("20230601115414_autoIncrementID")]
+    partial class autoIncrementID
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,8 +29,7 @@ namespace PR_103_2019.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn(1,1);
+                        .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
@@ -53,17 +55,13 @@ namespace PR_103_2019.Migrations
                     b.HasIndex("SellerId");
 
                     b.ToTable("Article");
-
-                    
-
                 });
 
             modelBuilder.Entity("PR_103_2019.Models.Order", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn(1, 1);
+                        .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
@@ -109,8 +107,7 @@ namespace PR_103_2019.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn(1, 1);
+                        .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 

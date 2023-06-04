@@ -19,9 +19,10 @@ namespace PR_103_2019.Controllers
         private readonly PR_103_2019Context _context;
         private readonly IUserService _userService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, PR_103_2019Context db)
         {
             _userService = userService;
+            _context = db;
         }
 
         // GET: api/Users
@@ -50,7 +51,6 @@ namespace PR_103_2019.Controllers
         }
 
         // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(long id, User user)
         {
@@ -81,7 +81,6 @@ namespace PR_103_2019.Controllers
         }
 
         // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public IActionResult RegisterUser([FromBody]UserDto userDto)
         {
@@ -89,6 +88,10 @@ namespace PR_103_2019.Controllers
             try
             {
                 user = _userService.RegisterUser(userDto);
+                if(user== null)
+                {
+                    return BadRequest("Korisnik nije mogao da se doda");
+                }
             }
             catch (Exception)
             {
@@ -101,22 +104,18 @@ namespace PR_103_2019.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(long id)
+        public IActionResult DeleteUser(long id)
         {
-            if (_context.User == null)
+            try
             {
-                return NotFound();
+                _userService.DeleteUser(id);
+                return Ok();
             }
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
+            catch (Exception)
             {
-                return NotFound();
+
+                return BadRequest();
             }
-
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
         private bool UserExists(long id)

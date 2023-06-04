@@ -17,6 +17,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IArticleService, ArticleService>();
+
 
 MapperConfiguration mapperConfig = new MapperConfiguration(mc =>
 {

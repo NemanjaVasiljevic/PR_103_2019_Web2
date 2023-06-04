@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PR_103_2019.Data;
+using PR_103_2019.Dtos;
+using PR_103_2019.Interfaces;
 using PR_103_2019.Models;
+using PR_103_2019.Services;
 
 namespace PR_103_2019.Controllers
 {
@@ -15,105 +18,76 @@ namespace PR_103_2019.Controllers
     public class ArticlesController : ControllerBase
     {
         private readonly PR_103_2019Context _context;
+        private readonly IArticleService _articleService;
 
-        public ArticlesController(PR_103_2019Context context)
+        public ArticlesController(PR_103_2019Context context, IArticleService articleService)
         {
             _context = context;
+            _articleService = articleService;
         }
 
         // GET: api/Articles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Article>>> GetArticle()
+        public IActionResult GetArticle()
         {
-          if (_context.Article == null)
-          {
-              return NotFound();
-          }
-            return await _context.Article.ToListAsync();
+            return Ok(_articleService.GetAllArticle());
         }
 
         // GET: api/Articles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Article>> GetArticle(long id)
+        public IActionResult GetArticle(long articleId)
         {
-          if (_context.Article == null)
-          {
-              return NotFound();
-          }
-            var article = await _context.Article.FindAsync(id);
-
-            if (article == null)
-            {
-                return NotFound();
-            }
-
-            return article;
+            return Ok(_articleService.GetArticle(articleId));
         }
 
         // PUT: api/Articles/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutArticle(long id, Article article)
+        public IActionResult UpdateArticle(long id, ArticleDto article)
         {
-            if (id != article.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(article).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _articleService.UpdateArticle(article, id);
+                return Ok();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!ArticleExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                return BadRequest();
+            }
         }
 
         // POST: api/Articles
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Article>> PostArticle(Article article)
+        public IActionResult CreateArticle(ArticleDto article, long sellerId)
         {
-          if (_context.Article == null)
-          {
-              return Problem("Entity set 'PR_103_2019Context.Article'  is null.");
-          }
-            _context.Article.Add(article);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _articleService.AddArticle(article, sellerId);
+                return Ok();
+            }
+            catch (Exception)
+            {
 
-            return CreatedAtAction("GetArticle", new { id = article.Id }, article);
+                return BadRequest();
+            }
         }
 
         // DELETE: api/Articles/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteArticle(long id)
+        public IActionResult DeleteArticle(long articleId)
         {
-            if (_context.Article == null)
+            try
             {
-                return NotFound();
+                _articleService.DeleteArticle(articleId);
+                return Ok();
             }
-            var article = await _context.Article.FindAsync(id);
-            if (article == null)
+            catch (Exception)
             {
-                return NotFound();
+
+                return BadRequest();
             }
-
-            _context.Article.Remove(article);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
         private bool ArticleExists(long id)
