@@ -5,8 +5,9 @@ namespace PR_103_2019.Dtos
     public class OrderDto
     {
         public long Id { get; set; }
-        public Article Article { get; set; }
-        public User Buyer { get; set; }
+        public int ArticleQuantity { get; set; }
+        public long ArticleId { get; set; }
+        public long BuyerId { get; set; }
         public OrderState Status { get; set; }
         public string Address { get; set; }
         public double TotalPrice { get; set; }

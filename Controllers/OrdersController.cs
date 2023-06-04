@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PR_103_2019.Data;
+using PR_103_2019.Dtos;
+using PR_103_2019.Interfaces;
 using PR_103_2019.Models;
 
 namespace PR_103_2019.Controllers
@@ -15,85 +17,38 @@ namespace PR_103_2019.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly PR_103_2019Context _context;
+        private IOrderService _orderService;
 
-        public OrdersController(PR_103_2019Context context)
+        public OrdersController(PR_103_2019Context context, IOrderService service)
         {
             _context = context;
+            _orderService = service;
         }
 
         // GET: api/Orders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrder()
+        public IActionResult GetOrder()
         {
-          if (_context.Order == null)
-          {
-              return NotFound();
-          }
-            return await _context.Order.ToListAsync();
+            return Ok(_orderService.GetAllOrders());
+                
         }
 
         // GET: api/Orders/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(long id)
+        public IActionResult GetOrder(long id)
         {
-          if (_context.Order == null)
-          {
-              return NotFound();
-          }
-            var order = await _context.Order.FindAsync(id);
-
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return order;
+            return Ok(_orderService.GetOrderById(id));
         }
 
         // PUT: api/Orders/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(long id, Order order)
-        {
-            if (id != order.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(order).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+        //[HttpPut("{id}")]
+            
 
         // POST: api/Orders
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
+        public IActionResult CreateOrder(long userId, [FromBody] OrderDto order)
         {
-          if (_context.Order == null)
-          {
-              return Problem("Entity set 'PR_103_2019Context.Order'  is null.");
-          }
-            _context.Order.Add(order);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
+            return Ok(_orderService.CreateOrder(order, userId));
         }
 
         // DELETE: api/Orders/5

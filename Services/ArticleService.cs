@@ -21,7 +21,6 @@ namespace PR_103_2019.Services
         {
             Article articleDb = mapper.Map<Article>(article);
             articleDb.Seller = dbContext.User.Find(userId);
-            articleDb.Orders = new List<Order>();
 
             dbContext.Add(articleDb);
             try

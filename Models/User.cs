@@ -11,7 +11,7 @@
         public string Address { get; set; }
         public string? BirthDay { get; set; }
         public Role? Role { get; set; }
-        public bool Verified { get; set; }
+        public VerificationState? VerificationStatus { get; set; }
         public string? ProfilePicture { get; set; }
         public List<Article> Articles { get; set; }
         public List<Order> Orders { get; set; }

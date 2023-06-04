@@ -13,7 +13,7 @@ namespace PR_103_2019.Dtos
         public string Address { get; set; }
         public string? BirthDay { get; set; }
         public Role? Role { get; set; }
-        public bool Verified { get; set; }
+        public VerificationState? VerificationStatus { get; set; }
         public string? ProfilePicture { get; set; }
     }
 }

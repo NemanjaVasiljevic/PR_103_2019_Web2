@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PR_103_2019.Data;
 
@@ -11,9 +12,11 @@ using PR_103_2019.Data;
 namespace PR_103_2019.Migrations
 {
     [DbContext(typeof(PR_103_2019Context))]
-    partial class PR_103_2019ContextModelSnapshot : ModelSnapshot
+    [Migration("20230604153424_finalDBUpdate")]
+    partial class finalDBUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,11 +72,8 @@ namespace PR_103_2019.Migrations
                     b.Property<DateTime>("ArrivalDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("ArticleId")
+                    b.Property<long>("ArticlesId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("ArticleQuantity")
-                        .HasColumnType("int");
 
                     b.Property<long>("BuyerId")
                         .HasColumnType("bigint");
@@ -96,7 +96,7 @@ namespace PR_103_2019.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ArticleId");
+                    b.HasIndex("ArticlesId");
 
                     b.HasIndex("BuyerId");
 
@@ -144,8 +144,8 @@ namespace PR_103_2019.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("VerificationStatus")
-                        .HasColumnType("int");
+                    b.Property<bool>("Verified")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -165,9 +165,9 @@ namespace PR_103_2019.Migrations
 
             modelBuilder.Entity("PR_103_2019.Models.Order", b =>
                 {
-                    b.HasOne("PR_103_2019.Models.Article", "Article")
+                    b.HasOne("PR_103_2019.Models.Article", "Articles")
                         .WithMany("Orders")
-                        .HasForeignKey("ArticleId")
+                        .HasForeignKey("ArticlesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -177,7 +177,7 @@ namespace PR_103_2019.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Article");
+                    b.Navigation("Articles");
 
                     b.Navigation("Buyer");
                 });
