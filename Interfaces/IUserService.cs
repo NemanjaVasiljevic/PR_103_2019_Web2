@@ -7,7 +7,9 @@ namespace PR_103_2019.Interfaces
         List<UserDto> GetAllUsers();
         UserDto RegisterUser(UserDto user);
         UserDto GetUserById(long id);
-        string Login(UserDto loginUser);
+        string Login(LoginDto loginUser);
+        UserDto UpdateUser(long id, UserDto userDto);
+        UserDto VerifyUser(VerificationDto verifyDto);
         bool DeleteUser(long id);
     }
 }

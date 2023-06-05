@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,20 +35,20 @@ namespace PR_103_2019.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        [Authorize(Roles ="ADMIN")]
+        public IActionResult GetUserById(long id)
         {
-          if (_context.User == null)
-          {
-              return NotFound();
-          }
-            var user = await _context.User.FindAsync(id);
-
-            if (user == null)
+            UserDto user;
+            try
             {
-                return NotFound();
+                user = _userService.GetUserById(id);
             }
+            catch (Exception)
+            {
 
-            return user;
+                return NotFound($"User with id {id} was not found");
+            }
+            return Ok(user);
         }
 
         // PUT: api/Users/5
@@ -90,13 +91,31 @@ namespace PR_103_2019.Controllers
                 user = _userService.RegisterUser(userDto);
                 if(user== null)
                 {
-                    return BadRequest("Korisnik nije mogao da se doda");
+                    return BadRequest("Failed to add a user");
                 }
             }
             catch (Exception)
             {
 
                 throw;
+            }
+
+            return Ok(user);
+        }
+
+        [HttpPost("verify")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult VerifyUser([FromBody] VerificationDto verifyDto)
+        {
+            UserDto user;
+
+            try
+            {
+                user = _userService.VerifyUser(verifyDto);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
             }
 
             return Ok(user);
@@ -116,6 +135,25 @@ namespace PR_103_2019.Controllers
 
                 return BadRequest();
             }
+        }
+
+
+        [HttpPost("login")]
+        public IActionResult LoginUser([FromBody] LoginDto user)
+        {
+            string token;
+
+            try
+            {
+                token = _userService.Login(user);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
+
+            return Ok(token);
         }
 
         private bool UserExists(long id)

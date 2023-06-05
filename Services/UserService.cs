@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PR_103_2019.Data;
 using PR_103_2019.Dtos;
@@ -53,16 +55,16 @@ namespace PR_103_2019.Services
             }
         }
 
-        public string Login(UserDto loginUser)
+        public string Login(LoginDto loginUser)
         {
-            User user = dbContext.User.FirstOrDefault(u => u.Username == loginUser.Username);
+            User user = dbContext.User.FirstOrDefault(u => u.Email == loginUser.Email);
 
             if(user == null)
             {
                 throw new Exception("Incorrect username!");
             }
             
-            if(!ComputeHmac(loginUser.Password, loginUser.Username).Equals(ComputeHmac(user.Password, user.Username)))
+            if(!ComputeHmac(user.Password, user.Email).Equals(ComputeHmac(loginUser.Password, loginUser.Email)))
             {
                 throw new Exception("Incorrect password!");
             }
@@ -94,7 +96,7 @@ namespace PR_103_2019.Services
         public UserDto RegisterUser(UserDto user)
         {
             User userDb = mapper.Map<User>(user);
-            userDb.Password = ComputeHmac(userDb.Password, userDb.Username);
+            userDb.Password = ComputeHmac(userDb.Password, userDb.Email);
 
             if(user.Role == Role.SELLER || user.Role == Role.ADMIN)
             {
@@ -117,6 +119,55 @@ namespace PR_103_2019.Services
             }
 
             return mapper.Map<UserDto>(userDb);
+        }
+
+        public UserDto UpdateUser(long id, UserDto userDto)
+        {
+            User user = dbContext.User.Find(id);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            user.Username = userDto.Username;
+            user.Email = userDto.Email;
+            user.Name = userDto.Name;
+            user.Surname = userDto.Surname;
+            user.BirthDay = userDto.BirthDay;
+            user.Address = userDto.Address;
+
+            if (!ComputeHmac(userDto.Password, userDto.Email).Equals(ComputeHmac(user.Password, user.Email)))
+            {
+                user.Password = ComputeHmac(userDto.Password, user.Email);
+            }
+
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+            return mapper.Map<UserDto>(user);
+        }
+
+        public UserDto VerifyUser(VerificationDto verifyDto)
+        {
+            User user = dbContext.User.Find(verifyDto.UserId);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            user.VerificationStatus = verifyDto.VerificationStatus;
+
+            dbContext.SaveChanges();
+
+            return mapper.Map<UserDto>(user);
         }
 
         public bool DeleteUser(long id)
