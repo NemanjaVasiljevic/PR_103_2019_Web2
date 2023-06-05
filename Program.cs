@@ -20,6 +20,17 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IArticleService, ArticleService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "cors", builder =>
+    {
+        builder.WithOrigins("http://localhost:3000")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+    });
+});
+
 
 MapperConfiguration mapperConfig = new MapperConfiguration(mc =>
 {
@@ -39,10 +50,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("cors");
 app.UseAuthorization();
 app.UseAuthentication();
 
 app.MapControllers();
+
 
 app.Run();

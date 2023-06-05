@@ -110,6 +110,7 @@ namespace PR_103_2019.Controllers
             UserDto user;
 
             try
+
             {
                 user = _userService.VerifyUser(verifyDto);
             }

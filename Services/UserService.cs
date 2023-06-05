@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.CodeAnalysis.Scripting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PR_103_2019.Data;
 using PR_103_2019.Dtos;
 using PR_103_2019.Interfaces;
 using PR_103_2019.Models;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Authentication;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,13 +15,13 @@ namespace PR_103_2019.Services
     {
         private PR_103_2019Context dbContext;
         private IMapper mapper;
-        private readonly IConfigurationSection secretKey;
+        private readonly IConfigurationSection _secretKey;
 
-        public UserService(PR_103_2019Context db, IMapper map,IConfiguration key)
+        public UserService(IConfiguration config, PR_103_2019Context db, IMapper map)
         {
+            _secretKey = config.GetSection("Secret Key");
             dbContext = db;
             mapper = map;
-            secretKey = key.GetSection("Secret Key");
         }
 
         private string ComputeHmac(string data, string key)
@@ -64,7 +61,7 @@ namespace PR_103_2019.Services
                 throw new Exception("Incorrect username!");
             }
             
-            if(!ComputeHmac(user.Password, user.Email).Equals(ComputeHmac(loginUser.Password, loginUser.Email)))
+            if(!user.Password.Equals(ComputeHmac(loginUser.Password, loginUser.Email)))
             {
                 throw new Exception("Incorrect password!");
             }
@@ -78,9 +75,9 @@ namespace PR_103_2019.Services
                 claims.Add(new Claim("VerificationStatus", user.VerificationStatus.ToString()));
             }
 
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey.Value));
+            SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecretKeySecretKey"));
 
-            SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            SigningCredentials signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken securityToken = new JwtSecurityToken(
                 issuer: "http://localhost:44319",
