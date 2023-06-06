@@ -40,7 +40,8 @@ namespace PR_103_2019.Services
             orderDb.Status = OrderState.RESERVED;
             orderDb.TotalPrice = article.Price * orderDb.ArticleQuantity;
             orderDb.OrdredDate = DateTime.UtcNow;
-            orderDb.ArrivalDate = DateTime.UtcNow;
+            Random rnd = new Random();
+            orderDb.ArrivalDate = DateTime.UtcNow.AddMinutes(rnd.Next(1,60));
 
             
 

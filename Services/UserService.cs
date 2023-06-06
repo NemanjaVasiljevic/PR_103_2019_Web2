@@ -104,6 +104,13 @@ namespace PR_103_2019.Services
             User userDb = mapper.Map<User>(user);
             userDb.Password = ComputeHmac(userDb.Password, userDb.Email);
 
+            User userEmail = dbContext.User.FirstOrDefault(u => u.Email == user.Email);
+            if(userEmail != null)
+            {
+                throw new InvalidCredentialsException("User with specified username and/or email already exists!");
+            }
+
+
             if(user.Role == Role.ADMIN || user.Role == Role.USER)
             {
                 userDb.VerificationStatus = VerificationState.ACCEPTED;
@@ -120,7 +127,7 @@ namespace PR_103_2019.Services
             catch (FormatException)
             {
 
-                throw new InvalidCredentialsException("Invali email");
+                throw new InvalidCredentialsException("Invalid email");
             }
 
             dbContext.Add(userDb);
@@ -128,10 +135,6 @@ namespace PR_103_2019.Services
             try
             {
                dbContext.SaveChanges();
-            }
-            catch (UniqueConstraintException)
-            {
-                throw new InvalidCredentialsException("User with specified username and/or email already exists!");
             }
             catch (CannotInsertNullException)
             {

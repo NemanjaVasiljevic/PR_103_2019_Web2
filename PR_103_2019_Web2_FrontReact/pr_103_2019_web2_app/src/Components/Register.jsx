@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';  
+import { useNavigate } from 'react-router';
 
 function Register(props){
     const[username, setUsername] = useState('');
@@ -11,6 +12,9 @@ function Register(props){
     const[birthDay, setBirthDay] = useState('');
     const[role, setRole] = useState('');
     const[profilePicture, setProfilePicture] = useState('');
+
+    const navigate = useNavigate();
+
 
     const userDto = {
         Username: username,
@@ -30,8 +34,15 @@ function Register(props){
 
         console.log(userDto.Role);
 
-        return axios
-                    .post("https://localhost:7100/api/Users", userDto);
+        try{ 
+            axios.post("https://localhost:7100/api/Users", userDto);
+            navigate('/login');
+
+        }catch{
+            window.alert("Something went wrong");
+            navigate('/registration');
+
+        }
     }
 
     return(
@@ -121,6 +132,16 @@ function Register(props){
                 />
             </div>
             <button type="submit" className="btn btn-primary">Register</button>
+            <div>
+            <br/>
+            <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={()=>navigate('/media')}
+             >
+                    Register using social media
+            </button>
+            </div>
         </form>
     );
 

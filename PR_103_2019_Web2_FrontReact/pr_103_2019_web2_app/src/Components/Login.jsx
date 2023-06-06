@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';  
-import { useNavigate } from 'react-router';
 
 const Login = ({onLogin}) =>{
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
-    const navigate = useNavigate();
   
   
     const handleSubmit = async (e) => {
@@ -31,7 +29,6 @@ const Login = ({onLogin}) =>{
                   if (result.data !== null) {
                     const userData = result.data;
                     onLogin(userData);
-                    navigate('/home');
                   }
                 });
             }

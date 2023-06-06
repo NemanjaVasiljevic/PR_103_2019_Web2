@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PR_103_2019.Data;
 using PR_103_2019.Dtos;
+using PR_103_2019.Exceptions;
 using PR_103_2019.Interfaces;
 using PR_103_2019.Models;
 
@@ -53,32 +54,29 @@ namespace PR_103_2019.Controllers
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, User user)
+        public IActionResult UpdateUser(long id, [FromBody] UserDto userDto)
         {
-            if (id != user.Id)
+            if (!User.HasClaim("Id", id.ToString()))
             {
-                return BadRequest();
+                return Forbid();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            UserDto user;
 
             try
             {
-                await _context.SaveChangesAsync();
+                user = _userService.UpdateUser(id, userDto);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ResourceNotFoundException e)
             {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound(e.Message);
+            }
+            catch (InvalidFieldsException e)
+            {
+                return BadRequest(e.Message);
             }
 
-            return NoContent();
+            return Ok(user);
         }
 
         // POST: api/Users

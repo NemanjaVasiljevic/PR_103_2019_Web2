@@ -123,3 +123,77 @@ code {
   cursor: pointer;
   background-color: #f2f2f2;
 }
+.article-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.article-table th,
+.article-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.article-table th {
+  background-color: #000000;
+}
+
+.article-table tbody tr:hover {
+  background-color: #454343;
+}
+
+.dashboard-heading {
+  color: white;
+}
+
+.dashboard-items-container > div {
+  margin-bottom: 8px;
+}
+
+.home-container {
+  padding: 24px;
+}
+
+.user-table-container {
+  margin-top: 20px;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.user-table th {
+  background-color: #000000;
+  font-weight: bold;
+  text-align: left;
+}
+
+.user-table tbody tr:nth-child(even) {
+  background-color: #000000;
+}
+
+.user-table tbody tr:hover {
+  background-color: #380031;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #45a049;
+}
