@@ -56,11 +56,6 @@ namespace PR_103_2019.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateUser(long id, [FromBody] UserDto userDto)
         {
-            if (!User.HasClaim("Id", id.ToString()))
-            {
-                return Forbid();
-            }
-
             UserDto user;
 
             try

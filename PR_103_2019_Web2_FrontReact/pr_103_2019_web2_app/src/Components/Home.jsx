@@ -36,18 +36,20 @@ const Home = ({ user, onLogout }) => {
           });
       }, []);
 
+      
 
       const renderRoutes = () => {
         if (user.role === 1) {
           return (
             <>
-              <Route path="/" element={<ArticleContent user={user} articles={articles} />} />
+             <Route path="/" element={<ArticleContent user={user} articles={articles} />} />
+
             </>
           );
         } else if (user.role === 0) {
           return (
             <>
-              <Route path="/" element={<AdminContent user={user} users={users}/>} />
+              <Route path="/" element={<AdminContent user={user} users={users} />} />
             </>
           );
         } 
@@ -59,13 +61,20 @@ const Home = ({ user, onLogout }) => {
     const handleLogout = () => {
       // Call the logout method passed as a prop
       onLogout();
+      localStorage.removeItem('user');
       navigate('/');
 
     };
+
+
+    const handleProfile = () =>{
+      navigate('/edit');
+    };
+
     let items = [];
 
     // Common item visible for all roles
-    items.push(<div key="profile">Profil</div>);
+    items.push(<div key="profile" onClick={handleProfile}>Profil</div>);
     items.push(<div key="log-out" onClick={handleLogout}>Log out</div>);
 
     // Role-specific items

@@ -6,6 +6,8 @@ import Home from './Components/Home';
 import { useState, useEffect } from 'react';
 import SocialMediaRegistration from './Components/SocialMediaRegistration';
 import { useNavigate } from 'react-router';
+import EditProfile from './Components/EditProfile';
+
 
 
 const App = () => {
@@ -29,13 +31,19 @@ const App = () => {
     setUser(null);
     localStorage.removeItem('user');
   };
+  const handleUpdate = (updatedUser) => {
+    // Call the logout method passed as a prop
+    localStorage.setItem('user',JSON.stringify(updatedUser))
+    navigate('/home');
 
+  };
   return (
     <Routes>
       <Route path="/" element={<Login onLogin={handleLogin}/>} />
       <Route path="/registration" element={<Register/>} />
       <Route path="/media" element={<SocialMediaRegistration/>} />
       <Route path="/home" element={<Home user={user} onLogout={handleLogout}/>} />
+      <Route path="/edit" element={<EditProfile user={user} onUpdate={handleUpdate} />} />
     </Routes>
   );
 }
