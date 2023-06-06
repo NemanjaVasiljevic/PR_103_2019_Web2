@@ -10,6 +10,7 @@ namespace PR_103_2019.Interfaces
         string Login(LoginDto loginUser);
         UserDto UpdateUser(long id, UserDto userDto);
         UserDto VerifyUser(VerificationDto verifyDto);
+        UserDto GetUserByEmail(string email);
         bool DeleteUser(long id);
     }
 }

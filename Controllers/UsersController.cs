@@ -138,6 +138,13 @@ namespace PR_103_2019.Controllers
             }
         }
 
+        // GET: api/Users/email
+        [HttpGet("email")]
+        public IActionResult GetUserByEmail(string email)
+        {
+            UserDto user = _userService.GetUserByEmail(email);
+            return Ok(user);
+        }
 
         [HttpPost("login")]
         public IActionResult LoginUser([FromBody] LoginDto user)
@@ -153,7 +160,7 @@ namespace PR_103_2019.Controllers
 
                 return BadRequest();
             }
-
+            
             return Ok(token);
         }
 

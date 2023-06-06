@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using EntityFramework.Exceptions.Common;
 using Microsoft.IdentityModel.Tokens;
 using PR_103_2019.Data;
 using PR_103_2019.Dtos;
+using PR_103_2019.Exceptions;
 using PR_103_2019.Interfaces;
 using PR_103_2019.Models;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -58,12 +61,12 @@ namespace PR_103_2019.Services
 
             if(user == null)
             {
-                throw new Exception("Incorrect username!");
+                throw new InvalidCredentialsException("Incorrect email!");
             }
             
             if(!user.Password.Equals(ComputeHmac(loginUser.Password, loginUser.Email)))
             {
-                throw new Exception("Incorrect password!");
+                throw new InvalidCredentialsException("Incorrect password!");
             }
 
 
@@ -89,32 +92,63 @@ namespace PR_103_2019.Services
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
 
+        public UserDto GetUserByEmail(string email)
+        {
+            User user = dbContext.User.FirstOrDefault(u => u.Email == email);
+            
+            return mapper.Map<UserDto>(user);
+        }
 
         public UserDto RegisterUser(UserDto user)
         {
             User userDb = mapper.Map<User>(user);
             userDb.Password = ComputeHmac(userDb.Password, userDb.Email);
 
-            if(user.Role == Role.SELLER || user.Role == Role.ADMIN)
+            if(user.Role == Role.ADMIN || user.Role == Role.USER)
             {
                 userDb.VerificationStatus = VerificationState.ACCEPTED;
             }
-            else
+            else if(user.Role == Role.SELLER)
             {
                 userDb.VerificationStatus = VerificationState.PENDING;
             }
 
+            try
+            {
+                MailAddress userMail = new MailAddress(userDb.Email);
+            }
+            catch (FormatException)
+            {
+
+                throw new InvalidCredentialsException("Invali email");
+            }
+
             dbContext.Add(userDb);
+
             try
             {
                dbContext.SaveChanges();
             }
+            catch (UniqueConstraintException)
+            {
+                throw new InvalidCredentialsException("User with specified username and/or email already exists!");
+            }
+            catch (CannotInsertNullException)
+            {
+                throw new InvalidFieldsException("One of more fields are missing!");
+            }
             catch (Exception)
             {
-
-                return null;
+                throw;
             }
 
+            if (user.Role == Role.SELLER)
+            {
+                EmailSender mail = new EmailSender();
+                mail.SendVerificationEmail(userDb.Email, "Vas nalog je kreiran admin ce potvrditi vasu verifikaciju." +
+                                                         "Povratak na aplikaciju: http://localhost:3000/home");
+                                        
+            }
             return mapper.Map<UserDto>(userDb);
         }
 
@@ -157,7 +191,7 @@ namespace PR_103_2019.Services
 
             if (user == null)
             {
-                return null;
+                throw new ResourceNotFoundException("User with specified id doesn't exist!");
             }
 
             user.VerificationStatus = verifyDto.VerificationStatus;
@@ -192,5 +226,6 @@ namespace PR_103_2019.Services
 
 
         }
+    
     }
 }
