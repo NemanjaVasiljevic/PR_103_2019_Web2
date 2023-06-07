@@ -88,6 +88,10 @@ const Home = ({ user, onLogout }) => {
       navigate('/edit');
     };
 
+    const handleAddArticle = () =>{
+      navigate('/addArticle');
+    }
+
     let items = [];
 
     // Common item visible for all roles
@@ -96,7 +100,7 @@ const Home = ({ user, onLogout }) => {
 
     // Role-specific items
     if (user.role === 2) { // prodavac
-      items.push(<div key="dodavanje-artikla">Dodavanje artikla</div>);
+      items.push(<div key="dodavanje-artikla" onClick={handleAddArticle}>Dodavanje artikla</div>);
       items.push(<div key="nove-porudzbine">Nove porudzbine</div>);
       items.push(<div key="moje-porudzbine">Moje porudzbine</div>);
     } else if (user.role === 1) { // korisnik

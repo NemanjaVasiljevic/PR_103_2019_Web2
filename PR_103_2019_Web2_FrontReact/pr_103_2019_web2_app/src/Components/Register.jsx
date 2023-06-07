@@ -35,8 +35,15 @@ function Register(props){
         console.log(userDto.Role);
 
         try{ 
-            axios.post("https://localhost:7100/api/Users", userDto);
-            navigate('/login');
+            axios.post("https://localhost:7100/api/Users", userDto)
+            .then((response) =>{
+            console.log('Product successfully created:', response.data);
+            navigate('/');
+            })
+            .catch(() => {
+            window.alert('Username or email are already taken');
+            navigate('/registration');
+            });
 
         }catch{
             window.alert("Something went wrong");

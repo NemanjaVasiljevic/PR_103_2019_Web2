@@ -235,6 +235,10 @@ label {
   cursor: pointer;
   transition: background-color 0.3s;
 }
+.article-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
 
 .btn:hover {
   background-color: #0056b3;
@@ -244,4 +248,10 @@ label {
   background-color: #003c80;
 }
 
+.btn-primary {
+  background-color: #007bff;
+}
 
+.btn-primary:hover {
+  background-color: #0069d9;
+}

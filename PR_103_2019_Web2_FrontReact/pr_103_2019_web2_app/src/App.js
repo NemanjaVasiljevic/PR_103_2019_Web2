@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import SocialMediaRegistration from './Components/SocialMediaRegistration';
 import { useNavigate } from 'react-router';
 import EditProfile from './Components/EditProfile';
+import AddArticle from './Components/AddArticle';
 
 
 
@@ -44,6 +45,7 @@ const App = () => {
       <Route path="/media" element={<SocialMediaRegistration/>} />
       <Route path="/home" element={<Home user={user} onLogout={handleLogout}/>} />
       <Route path="/edit" element={<EditProfile user={user} onUpdate={handleUpdate} />} />
+      <Route path="/addArticle" element={<AddArticle user={user}/>} />
     </Routes>
   );
 }

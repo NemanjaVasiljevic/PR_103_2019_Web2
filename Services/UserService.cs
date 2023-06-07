@@ -107,11 +107,16 @@ namespace PR_103_2019.Services
             User userEmail = dbContext.User.FirstOrDefault(u => u.Email == user.Email);
             if(userEmail != null)
             {
-                throw new InvalidCredentialsException("User with specified username and/or email already exists!");
+                throw new InvalidCredentialsException("User with specified email already exists!");
+            }
+            User userUsername = dbContext.User.FirstOrDefault(u => u.Username == user.Username);
+            if (userUsername != null)
+            {
+                throw new InvalidCredentialsException("User with specified username already exists!");
             }
 
 
-            if(user.Role == Role.ADMIN || user.Role == Role.USER)
+            if (user.Role == Role.ADMIN || user.Role == Role.USER)
             {
                 userDb.VerificationStatus = VerificationState.ACCEPTED;
             }

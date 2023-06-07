@@ -82,15 +82,14 @@ namespace PR_103_2019.Controllers
             try
             {
                 user = _userService.RegisterUser(userDto);
-                if(user== null)
-                {
-                    return BadRequest("Failed to add a user");
-                }
             }
-            catch (Exception)
+            catch (InvalidCredentialsException e)
             {
-
-                throw;
+                return Conflict(e.Message);
+            }
+            catch (InvalidFieldsException e)
+            {
+                return BadRequest(e.Message);
             }
 
             return Ok(user);
