@@ -34,6 +34,7 @@ const EditProfile = ({ user, onUpdate }) => {
 
   return (
         <form className="modern-form" onSubmit={handleSubmit} style={{color:'white'}}>
+        <h1>Change your profile</h1>
         <div className="form-group">
             <label htmlFor="username">Username:</label>
             <input

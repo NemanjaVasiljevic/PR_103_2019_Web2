@@ -103,7 +103,7 @@ code {
 
 .dashboard-items-container {
   display: grid;
-  grid-template-columns: repeat(4, 3fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-gap: 10px;
   width: 100%;
   max-width: 600px;

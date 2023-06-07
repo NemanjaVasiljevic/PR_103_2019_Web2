@@ -9,6 +9,7 @@ namespace PR_103_2019.Interfaces
         bool AddArticle(ArticleDto article, long sellerId);
         bool UpdateArticle(ArticleDto article, long sellerId);
         bool DeleteArticle(long articleId);
+        List<ArticleDto> GetAllArticlesBySellerId(long sellerId);
 
     }
 }

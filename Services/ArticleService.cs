@@ -21,6 +21,7 @@ namespace PR_103_2019.Services
         {
             Article articleDb = mapper.Map<Article>(article);
             articleDb.Seller = dbContext.User.Find(userId);
+            articleDb.SellerId = userId;
 
             dbContext.Add(articleDb);
             try
@@ -61,6 +62,28 @@ namespace PR_103_2019.Services
         public List<ArticleDto> GetAllArticle()
         {
             return mapper.Map<List<ArticleDto>>(dbContext.Article.ToList());
+        }
+
+        public List<ArticleDto> GetAllArticlesBySellerId(long sellerId)
+        {
+            List<Article> allArticles = dbContext.Article.ToList();
+            List<ArticleDto> filteredArticles = new List<ArticleDto>();
+            if(allArticles != null)
+            {
+                foreach (var item in allArticles)
+                {
+                    if(item.SellerId == sellerId)
+                    {
+                        filteredArticles.Add(mapper.Map<ArticleDto>(item));
+                    }
+                }
+
+                return filteredArticles;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public ArticleDto GetArticle(long id)

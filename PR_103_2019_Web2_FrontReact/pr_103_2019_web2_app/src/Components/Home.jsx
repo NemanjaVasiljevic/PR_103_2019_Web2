@@ -4,6 +4,7 @@ import axios from 'axios';
 import ArticleContent from './ArticleContent';
 import { Route, Routes } from 'react-router';
 import AdminContent from './AdminContent';
+import SellerContent from './SellerContent';
 
 
 const Home = ({ user, onLogout }) => {
@@ -52,6 +53,22 @@ const Home = ({ user, onLogout }) => {
               <Route path="/" element={<AdminContent user={user} users={users} />} />
             </>
           );
+        }else if (user.role === 2) {
+          console.log(user.verificationStatus)
+          if(user.verificationStatus === 0){
+            return (
+              <>
+                <Route path="/" element={<SellerContent user={user} articles={articles}/>} />
+              </>
+            );
+          }else{
+            return(
+              <Route path="/" element={<h1>
+                Vas nalog mora prvi da bude verifikovan od strane admina da bi se mogao koristiti
+              </h1>} />
+              
+            )
+          }
         } 
       };
 
@@ -102,7 +119,7 @@ const Home = ({ user, onLogout }) => {
   <div style={{color:'white'}}>
 
       <div className="home-container">
-          <h2 className="dashboard-heading" style={{color:'white'}}>Welcome to the Dashboard, {user.username}!</h2>
+          <h2 className="dashboard-heading" style={{color:'white'}}>Welcome to the web shop, {user.username}!</h2>
           <div className="dashboard-items-container">{renderDashboardItems()}</div>       
       </div>
 

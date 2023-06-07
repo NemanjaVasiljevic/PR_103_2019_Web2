@@ -97,7 +97,6 @@ namespace PR_103_2019.Controllers
         }
 
         [HttpPost("verify")]
-        [Authorize(Roles = "Admin")]
         public IActionResult VerifyUser([FromBody] VerificationDto verifyDto)
         {
             UserDto user;

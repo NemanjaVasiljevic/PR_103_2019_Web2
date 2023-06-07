@@ -1,13 +1,15 @@
 import React from 'react';
- 
+import axios from 'axios';
+
+
 const getRoleString = (role) => {
     switch (role) {
       case 0:
-        return 'Seller';
+        return 'Admin';
       case 1:
         return 'User';
       case 2:
-        return 'Admin';
+        return 'Seller';
       default:
         return '';
     }
@@ -32,7 +34,44 @@ const getRoleString = (role) => {
     return date.toLocaleDateString(undefined, options);
   };
 
+  const handleVerify = (userId) => {
+    const data = {
+      UserId: userId,
+      VerificationStatus: 0
+    };
+    
+    axios.post('https://localhost:7100/api/Users/verify', data)
+      .then(response => {
+        // Handle the successful verification response
+        console.log('User verification successful:', response.data);
+        window.location.reload();
+
+      })
+      .catch(error => {
+        // Handle the verification error
+        console.error('Error verifying user:', error);
+      });
+  };
+  const handleReject = (userId) => {
+    const data = {
+      UserId: userId,
+      VerificationStatus: 1
+    };
+    
+    axios.post('https://localhost:7100/api/Users/verify', data)
+      .then(response => {
+        // Handle the successful verification response
+        console.log('User verification successful:', response.data);
+        window.location.reload();
+      })
+      .catch(error => {
+        // Handle the verification error
+        console.error('Error verifying user:', error);
+      });
+  };
+
 const AdminContent = ({user, users }) => {
+
     const renderAdminTable = () => {
       return (
             <div className="user-table-container">
@@ -62,9 +101,9 @@ const AdminContent = ({user, users }) => {
                     <td>{getRoleString(user.role)}</td>
                     <td>{getVerificationStatusString(user.verificationStatus)}</td>                   
                     <td>
-                    <button className='submit-button' style={{ width: '110%' }}>Verify</button>
+                    <button className='submit-button' style={{ width: '110%' }} onClick={() => handleVerify(user.id)}>Verify</button>
                     <br/>
-                    <button className='submit-button' style={{ width: '110%'}}>Reject</button>
+                    <button className='submit-button' style={{ width: '110%'}} onClick={() => handleReject(user.id)}>Reject</button>
                     <br/>
                     </td>
                     
