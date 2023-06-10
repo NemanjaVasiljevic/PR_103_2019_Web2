@@ -13,12 +13,6 @@ const ArticleContent = ({ user,newOrder,articles }) => {
     }));
   };
 
-  const handleOrderClick = () => {
-    // Handle the order click event
-    // You can access the selected quantity using the 'quantity' state
-  };
-
-
 
 
     const renderArticleTable = () => {
@@ -51,13 +45,7 @@ const ArticleContent = ({ user,newOrder,articles }) => {
                         value={quantities[article.id] || 0}
                         onChange={(event) => handleQuantityChange(event, article.id)}
                       />
-                      <button
-                        className="submit-button"
-                        style={{ width: '50%' }}
-                        onClick={handleOrderClick}
-                      >
-                        Order
-                      </button>
+                      
                       {quantities[article.id] > 0 && (
                         <OrderForm
                           article={article}

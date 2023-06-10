@@ -107,6 +107,13 @@ const Home = ({ user, onLogout }) => {
       navigate('/ordersAdmin');
     }
 
+    const handlePrethodnePorudzbine = () =>{
+      navigate('/myOrdersUser');
+    }
+
+    const handleActiveOrders = () =>{
+      navigate('/activeOrdersUser');
+    }
 
     let items = [];
 
@@ -121,7 +128,8 @@ const Home = ({ user, onLogout }) => {
       items.push(<div key="moje-porudzbine">Moje porudzbine</div>);
     } else if (user.role === 1) { // korisnik
       items.push(<div key="nova-porudzbina" onClick={handleNewOrder}>Nova porudzbina</div>);
-      items.push(<div key="prethodne-porudzbine">Prethodne porudzbine</div>);
+      items.push(<div key="nova-porudzbina" onClick={handleActiveOrders}>Aktivne porudzbine</div>);
+      items.push(<div key="prethodne-porudzbine" onClick={handlePrethodnePorudzbine}>Prethodne porudzbine</div>);
     } else if (user.role === 0) {// admin
       items.push(<div key="verifikacija" onClick={handleVerifikacija}>Verifikacija</div>);
       items.push(<div key="sve-porudzbine" onClick={handlePorudzbineAdmin}>Sve porudzbine</div>);

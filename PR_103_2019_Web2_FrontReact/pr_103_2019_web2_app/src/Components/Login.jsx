@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';  
+import { FaSpinner } from 'react-icons/fa';
 
 const Login = ({onLogin}) =>{
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
-  
+    const [loading, setLoading] = useState(false);
   
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await axios.post("https://localhost:7100/api/Users/login", {
               Email: email,
@@ -34,6 +36,8 @@ const Login = ({onLogin}) =>{
             }
           } catch (error) {
             window.alert("Wrong email or password")
+          }finally {
+            setLoading(false); // Set loading state back to false after API call
           }
       };
   
@@ -63,7 +67,9 @@ const Login = ({onLogin}) =>{
                 className="form-input"
                 />
             </div>
-            <button type="submit" className="submit-button">Log In</button>
+            <button type="submit" className="submit-button" disabled={loading}>
+            {loading ? <FaSpinner className="spinner" /> : 'Log In'}
+            </button>
             <a href='/registration'>Dont have an account? Register now!</a>
         </form>
     )  

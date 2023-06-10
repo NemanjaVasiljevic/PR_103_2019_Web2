@@ -53,22 +53,10 @@ namespace PR_103_2019.Controllers
 
         // DELETE: api/Orders/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrder(long id)
+        public IActionResult DeleteOrder(long id)
         {
-            if (_context.Order == null)
-            {
-                return NotFound();
-            }
-            var order = await _context.Order.FindAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            _context.Order.Remove(order);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            _orderService.DeleteOrder(id);
+            return Ok();
         }
 
         private bool OrderExists(long id)

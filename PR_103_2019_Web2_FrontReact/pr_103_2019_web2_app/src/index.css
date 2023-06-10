@@ -279,3 +279,32 @@ label {
 .order-list-table tbody tr:hover {
   background-color: #f5f5f5;
 }
+
+.spinner {
+  animation: spin 1s linear infinite;
+  color: #ffffff; /* Change the color to your desired color */
+  font-size: 24px; /* Change the font size to your desired size */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.action-button {
+  background-color: #586b59;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.action-button:hover {
+  background-color: #4eb0fb;
+}

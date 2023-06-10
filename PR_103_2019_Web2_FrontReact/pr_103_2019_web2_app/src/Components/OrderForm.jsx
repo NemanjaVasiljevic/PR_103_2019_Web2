@@ -8,6 +8,8 @@ const OrderForm = ({ article, quantity, user }) => {
   const orderDto = {
     ArticleQuantity:quantity,
     ArticleId:article.id,
+    ArticleName:article.name,
+    BuyerName:user.name,
     BuyerId:user.id,
     Status:1,
     Address:address,
@@ -49,7 +51,7 @@ const OrderForm = ({ article, quantity, user }) => {
         <input
           type="text"
           id="address"
-          value={user.address}
+          placeholder={user.address}
           onChange={handleAddressChange}
         />
       </div>
@@ -61,7 +63,7 @@ const OrderForm = ({ article, quantity, user }) => {
           onChange={handleCommentChange}
         ></textarea>
       </div>
-      <button type="submit">Submit</button>
+      <button type="submit" className="submit-button" >Order</button>
     </form>
   );
 };

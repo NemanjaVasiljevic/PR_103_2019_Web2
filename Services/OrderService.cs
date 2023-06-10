@@ -41,11 +41,13 @@ namespace PR_103_2019.Services
             article.Quantity -= orderDb.ArticleQuantity;
             orderDb.Status = OrderState.RESERVED;
             orderDb.TotalPrice = article.Price * orderDb.ArticleQuantity;
-            orderDb.OrdredDate = DateTime.UtcNow;
-            Random rnd = new Random();
-            orderDb.ArrivalDate = DateTime.UtcNow.AddMinutes(rnd.Next(1,60));
+            TimeZoneInfo belgradeTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
 
-            
+            orderDb.OrdredDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, belgradeTimeZone);
+            Random rnd = new Random();
+            orderDb.ArrivalDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddMinutes(rnd.Next(1, 60)), belgradeTimeZone);
+
+
 
             try
             {
@@ -62,7 +64,7 @@ namespace PR_103_2019.Services
 
         }
 
-        public void DeleteOrder(long orderId, long userId)
+        public void DeleteOrder(long orderId)
         {
             Order order = dbContext.Order.Find(orderId);
             if(order != null)
@@ -74,7 +76,7 @@ namespace PR_103_2019.Services
                     throw new ResourceNotFoundException("Article with specified id doesn't exist!");
                 }
 
-                article.Quantity += order.Quantity;
+                article.Quantity += order.ArticleQuantity;
                 dbContext.Order.Remove(order);
                 dbContext.SaveChanges();
             }
@@ -112,7 +114,7 @@ namespace PR_103_2019.Services
                     orderDb.TotalPrice = article.Price * orderDb.ArticleQuantity;
                     orderDb.OrdredDate = DateTime.UtcNow;
                     Random rnd = new Random();
-                    orderDb.ArrivalDate = DateTime.UtcNow.AddMinutes(rnd.Next(1, 60));
+                    orderDb.ArrivalDate = DateTime.UtcNow.AddMinutes(rnd.Next(60, 240));
                 }
                 dbContext.SaveChanges();
             }
@@ -129,7 +131,7 @@ namespace PR_103_2019.Services
                         orderDb.TotalPrice = newArticle.Price * orderDb.ArticleQuantity;
                         orderDb.OrdredDate = DateTime.UtcNow;
                         Random rnd = new Random();
-                        orderDb.ArrivalDate = DateTime.UtcNow.AddMinutes(rnd.Next(1, 60));
+                        orderDb.ArrivalDate = DateTime.UtcNow.AddMinutes(rnd.Next(60, 240));
                     }
                     dbContext.SaveChanges();
                 }
