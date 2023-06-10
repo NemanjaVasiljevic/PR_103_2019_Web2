@@ -4,7 +4,7 @@
     {
         public long Id { get; set; }
         public int ArticleQuantity{ get; set; }
-        public Article Article { get; set; }
+        public List<Article> Articles { get; set; }
         public User Buyer { get; set; }
         public long ArticleId { get; set; }
         public long BuyerId { get; set; }

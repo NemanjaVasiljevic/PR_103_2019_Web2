@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PR_103_2019.Data;
 using PR_103_2019.Dtos;
+using PR_103_2019.Exceptions;
 using PR_103_2019.Interfaces;
 using PR_103_2019.Models;
 
@@ -65,6 +67,14 @@ namespace PR_103_2019.Services
             Order order = dbContext.Order.Find(orderId);
             if(order != null)
             {
+                Article article = dbContext.Article.Find(order.ArticleId);
+
+                if (article == null)
+                {
+                    throw new ResourceNotFoundException("Article with specified id doesn't exist!");
+                }
+
+                article.Quantity += order.Quantity;
                 dbContext.Order.Remove(order);
                 dbContext.SaveChanges();
             }
@@ -72,12 +82,60 @@ namespace PR_103_2019.Services
 
         public List<OrderDto> GetAllOrders()
         {
-            return mapper.Map<List<OrderDto>>(dbContext.Order.ToList());
+            List<OrderDto> res = mapper.Map<List<OrderDto>>(dbContext.Order.ToList());
+            foreach (var item in res)
+            {
+                item.BuyerName = dbContext.User.FirstOrDefault(u => u.Id == item.BuyerId).Name;
+                item.ArticleName = dbContext.Article.FirstOrDefault(a => a.Id == item.ArticleId).Name;
+            }
+
+            return res;
         }
 
         public OrderDto GetOrderById(long orderId)
         {
             return mapper.Map<OrderDto>(dbContext.Order.Find(orderId));
+        }
+
+        public OrderDto UpdateOrder(OrderDto orderDto, long articleId)
+        {
+            Order orderDb = mapper.Map<Order>(orderDto);
+            Article article = dbContext.Article.FirstOrDefault(a => a.OrderId == orderDto.Id);
+
+            if(article != null)
+            {
+                //ovaj artikal vec postoji u porudzbini
+                if (article.Quantity > orderDb.ArticleQuantity)
+                {
+                    article.Quantity -= orderDb.ArticleQuantity;
+                    orderDb.Status = OrderState.RESERVED;
+                    orderDb.TotalPrice = article.Price * orderDb.ArticleQuantity;
+                    orderDb.OrdredDate = DateTime.UtcNow;
+                    Random rnd = new Random();
+                    orderDb.ArrivalDate = DateTime.UtcNow.AddMinutes(rnd.Next(1, 60));
+                }
+                dbContext.SaveChanges();
+            }
+            else
+            {
+                //dodaje novi artikal u ponudu
+                Article newArticle = dbContext.Article.FirstOrDefault(a => a.Id == articleId);
+                if (newArticle != null)
+                {
+                    if (newArticle.Quantity > orderDb.ArticleQuantity)
+                    {
+                        newArticle.Quantity -= orderDb.ArticleQuantity;
+                        orderDb.Status = OrderState.RESERVED;
+                        orderDb.TotalPrice = newArticle.Price * orderDb.ArticleQuantity;
+                        orderDb.OrdredDate = DateTime.UtcNow;
+                        Random rnd = new Random();
+                        orderDb.ArrivalDate = DateTime.UtcNow.AddMinutes(rnd.Next(1, 60));
+                    }
+                    dbContext.SaveChanges();
+                }
+            }
+
+            return mapper.Map<OrderDto>(orderDb);
         }
     }
 }

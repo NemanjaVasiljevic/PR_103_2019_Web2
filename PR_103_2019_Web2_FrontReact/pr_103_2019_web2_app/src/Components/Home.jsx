@@ -11,6 +11,8 @@ const Home = ({ user, onLogout }) => {
     const navigate = useNavigate();
     const [articles, setArticles] = useState([]);
     const [users, setUsers] = useState([]);
+    const [verifikacija, setVerifikacija] = useState(false);
+    const [newOrder, setNewOrder] = useState(false);
 
 
     useEffect(() => {
@@ -43,14 +45,14 @@ const Home = ({ user, onLogout }) => {
         if (user.role === 1) {
           return (
             <>
-             <Route path="/" element={<ArticleContent user={user} articles={articles} />} />
+             <Route path="/" element={<ArticleContent user={user} newOrder={newOrder} articles={articles} />} />
 
             </>
           );
         } else if (user.role === 0) {
           return (
             <>
-              <Route path="/" element={<AdminContent user={user} users={users} />} />
+              <Route path="/" element={<AdminContent verifikacija={verifikacija} users={users} />} />
             </>
           );
         }else if (user.role === 2) {
@@ -92,6 +94,20 @@ const Home = ({ user, onLogout }) => {
       navigate('/addArticle');
     }
 
+    const handleVerifikacija = () =>{
+      setVerifikacija(!verifikacija);
+      navigate('/home');
+    }
+    const handleNewOrder = () =>{
+      setNewOrder(!newOrder);
+      navigate('/home');
+    }
+
+    const handlePorudzbineAdmin = () =>{
+      navigate('/ordersAdmin');
+    }
+
+
     let items = [];
 
     // Common item visible for all roles
@@ -104,11 +120,11 @@ const Home = ({ user, onLogout }) => {
       items.push(<div key="nove-porudzbine">Nove porudzbine</div>);
       items.push(<div key="moje-porudzbine">Moje porudzbine</div>);
     } else if (user.role === 1) { // korisnik
-      items.push(<div key="nova-porudzbina">Nova porudzbina</div>);
+      items.push(<div key="nova-porudzbina" onClick={handleNewOrder}>Nova porudzbina</div>);
       items.push(<div key="prethodne-porudzbine">Prethodne porudzbine</div>);
     } else if (user.role === 0) {// admin
-      items.push(<div key="verifikacija">Verifikacija</div>);
-      items.push(<div key="sve-porudzbine">Sve porudzbine</div>);
+      items.push(<div key="verifikacija" onClick={handleVerifikacija}>Verifikacija</div>);
+      items.push(<div key="sve-porudzbine" onClick={handlePorudzbineAdmin}>Sve porudzbine</div>);
     }
 
     return items;

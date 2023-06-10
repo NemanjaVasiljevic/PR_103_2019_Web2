@@ -8,6 +8,7 @@ namespace PR_103_2019.Interfaces
         List<OrderDto> GetAllOrders();
         OrderDto GetOrderById(long orderId);
         OrderDto CreateOrder(OrderDto orderDto, long userId);
+        OrderDto UpdateOrder(OrderDto orderDto, long articleId);
         void DeleteOrder(long orderId, long userId);
     }
 }

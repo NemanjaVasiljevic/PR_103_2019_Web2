@@ -70,7 +70,7 @@ const getRoleString = (role) => {
       });
   };
 
-const AdminContent = ({user, users }) => {
+const AdminContent = ({verifikacija, users }) => {
 
     const renderAdminTable = () => {
       return (
@@ -89,8 +89,10 @@ const AdminContent = ({user, users }) => {
                 </tr>
                 </thead>
                 <tbody>
-                {users
+                {
+                users
                     .filter(user => user.role !== 0) // Filter users with role 2
+                    .filter(user => !verifikacija || user.verificationStatus === 2)
                     .map(user => (
                     <tr key={user.id}>
                     <td>{user.username}</td>

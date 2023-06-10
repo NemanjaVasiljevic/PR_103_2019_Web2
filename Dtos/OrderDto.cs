@@ -7,7 +7,9 @@ namespace PR_103_2019.Dtos
         public long Id { get; set; }
         public int ArticleQuantity { get; set; }
         public long ArticleId { get; set; }
+        public string? ArticleName { get; set; }
         public long BuyerId { get; set; }
+        public string BuyerName { get; set; }
         public OrderState Status { get; set; }
         public string Address { get; set; }
         public double TotalPrice { get; set; }
