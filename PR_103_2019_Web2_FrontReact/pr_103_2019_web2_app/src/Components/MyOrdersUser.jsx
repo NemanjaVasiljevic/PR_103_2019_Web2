@@ -16,7 +16,14 @@ const MyOrdersUser = ({ user }) => {
       .get('https://localhost:7100/api/Orders')
       .then(response => {
         // Filter orders where arrival date has passed the current moment in time
-        const filteredOrders = response.data.filter(order => new Date(order.arrivalDate) < new Date());
+        let filteredOrders = [];
+        if (user.role === 2) {
+          filteredOrders = response.data.filter(order => order.sellerId === user.id)
+                                        .filter(order => new Date(order.arrivalDate) < new Date());;
+        } else {
+          // Filter orders where arrival date has passed the current moment in time
+          filteredOrders = response.data.filter(order => new Date(order.arrivalDate) < new Date());
+        }
         setOrders(filteredOrders);
       })
       .catch(error => {
@@ -40,7 +47,7 @@ const MyOrdersUser = ({ user }) => {
             <th>ID</th>
             <th>Article Quantity</th>
             <th>Article</th>
-            <th>Buyer</th>
+            <th>Seller</th>
             <th>Status</th>
             <th>Address</th>
             <th>Total Price</th>
@@ -56,7 +63,7 @@ const MyOrdersUser = ({ user }) => {
               <td>{order.id}</td>
               <td>{order.articleQuantity}</td>
               <td>{order.articleName}</td>
-              <td>{order.buyerName}</td>
+              <td>{order.sellerName}</td>
               <td>{order.status}</td>
               <td>{order.address}</td>
               <td>{order.totalPrice + 500}</td>

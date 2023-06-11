@@ -48,15 +48,32 @@ namespace PR_103_2019.Controllers
         [HttpPost]
         public IActionResult CreateOrder(long userId, [FromBody] OrderDto order)
         {
-            return Ok(_orderService.CreateOrder(order, userId));
+            try
+            {
+                return Ok(_orderService.CreateOrder(order, userId));
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
         // DELETE: api/Orders/5
         [HttpDelete("{id}")]
         public IActionResult DeleteOrder(long id)
         {
-            _orderService.DeleteOrder(id);
-            return Ok();
+            try
+            {
+                _orderService.DeleteOrder(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+
         }
 
         private bool OrderExists(long id)

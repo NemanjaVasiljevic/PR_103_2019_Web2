@@ -15,6 +15,8 @@ const ArticleContent = ({ user,newOrder,articles }) => {
 
 
 
+
+
     const renderArticleTable = () => {
       return (
         <div className="article-table-container">
@@ -56,6 +58,7 @@ const ArticleContent = ({ user,newOrder,articles }) => {
                     </div>
                   </td>
                 )}
+                
               </tr>
             ))}
           </tbody>

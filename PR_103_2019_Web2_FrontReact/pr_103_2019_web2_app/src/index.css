@@ -308,3 +308,56 @@ label {
 .action-button:hover {
   background-color: #4eb0fb;
 }
+
+
+.edit-article-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.edit-article-heading {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.edit-article-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.edit-article-field {
+  margin-bottom: 10px;
+}
+
+.edit-article-label {
+  display: block;
+  color: white;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.edit-article-input,
+.edit-article-textarea {
+  width: 300px;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.edit-article-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.edit-article-button:hover {
+  background-color: #45a049;
+}
+

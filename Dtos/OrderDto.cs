@@ -9,12 +9,13 @@ namespace PR_103_2019.Dtos
         public long ArticleId { get; set; }
         public string? ArticleName { get; set; }
         public long BuyerId { get; set; }
+        public long SellerId { get; set; }
         public string BuyerName { get; set; }
+        public string SellerName { get; set; }
         public OrderState Status { get; set; }
         public string Address { get; set; }
         public double TotalPrice { get; set; }
         public string Comment { get; set; }
-        public int Quantity { get; set; }
         public DateTime OrdredDate { get; set; }
         public DateTime ArrivalDate { get; set; }
     }

@@ -9,6 +9,7 @@ const EditProfile = ({ user, onUpdate }) => {
   const [surname, setSurname] = useState(user.surname);
   const [address, setAddress] = useState(user.address);
   const [birthDay, setBirthDay] = useState(user.birthDay);
+  const [profilePicture, setProfilePicture] = useState(user.profilePicture);
 
   const userDto = {
     Username: username,
@@ -18,6 +19,7 @@ const EditProfile = ({ user, onUpdate }) => {
     Surname: surname,
     Address: address,
     BirthDay: birthDay,
+    ProfilePicture: profilePicture
 }
 
   const handleSubmit = (e) => {
@@ -35,6 +37,17 @@ const EditProfile = ({ user, onUpdate }) => {
   return (
         <form className="modern-form" onSubmit={handleSubmit} style={{color:'white'}}>
         <h1>Change your profile</h1>
+
+        <div className="form-group">
+                <input
+                type="text"
+                className="form-control"
+                placeholder="Profile Picture"
+                value={profilePicture}
+                onChange={(e) => setProfilePicture(e.target.value)}
+                />
+        </div>
+
         <div className="form-group">
             <label htmlFor="username">Username:</label>
             <input

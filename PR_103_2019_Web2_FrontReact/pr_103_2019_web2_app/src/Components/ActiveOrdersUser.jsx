@@ -16,7 +16,14 @@ const ActiveOrdersUser = ({ user }) => {
       .get('https://localhost:7100/api/Orders')
       .then(response => {
         // Filter orders where arrival date has passed the current moment in time
-        const filteredOrders = response.data.filter(order => new Date(order.arrivalDate) > new Date());
+        let filteredOrders = [];
+        if (user.role === 2) {
+          filteredOrders = response.data.filter(order => order.sellerId === user.id)
+                                        .filter(order => new Date(order.arrivalDate) > new Date());;
+        } else {
+          // Filter orders where arrival date has passed the current moment in time
+          filteredOrders = response.data.filter(order => new Date(order.arrivalDate) > new Date());
+        }
         setOrders(filteredOrders);
       })
       .catch(error => {
@@ -33,7 +40,7 @@ const ActiveOrdersUser = ({ user }) => {
   const handleUpdateOrder = orderId => {
     // Handle updating the order with the given orderId
     // Redirect or perform any necessary action
-    navigate(`/update-order/${orderId}`);
+    window.alert("Update ce biti uradjen u nekom od sledecih patcheva");
   };
 
   const handleCancelOrder = orderId => {
@@ -46,7 +53,7 @@ const ActiveOrdersUser = ({ user }) => {
     })
     .catch(error => {
       // Handle the error
-      console.error('Error canceling the order:', error);
+      window.alert("Otkazivanje nije dozvoljeno, nije prosao 1h od narucivanja. Pokusajte ponovo kasnije");
     });
   };
 
@@ -63,9 +70,10 @@ const ActiveOrdersUser = ({ user }) => {
             <th>Article Quantity</th>
             <th>Article</th>
             <th>Buyer</th>
+            <th>Seller</th>
             <th>Status</th>
             <th>Address</th>
-            <th>Total Price</th>
+            <th>Total Price with delivery</th>
             <th>Comment</th>
             <th>Ordered Date</th>
             <th>Arrival Date</th>
@@ -80,16 +88,19 @@ const ActiveOrdersUser = ({ user }) => {
               <td>{order.articleQuantity}</td>
               <td>{order.articleName}</td>
               <td>{order.buyerName}</td>
+              <td>{order.sellerName}</td>
               <td>{order.status}</td>
               <td>{order.address}</td>
-              <td>{order.totalPrice + 500}</td>
+              <td>{order.totalPrice + 500} din</td>
               <td>{order.comment}</td>
               <td>{formatDate(order.ordredDate)}</td>
               <td>{formatDate(order.arrivalDate)}</td>
+              {user.role!==2 &&(
               <td>
                 <button className="action-button" onClick={() => handleUpdateOrder(order.id)}>Update</button>
                 <button className="action-button" onClick={() => handleCancelOrder(order.id)}>Cancel</button>
               </td>
+              )}
             </tr>
           ))}
         </tbody>

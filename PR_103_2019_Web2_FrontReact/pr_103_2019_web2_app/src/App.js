@@ -11,6 +11,8 @@ import AddArticle from './Components/AddArticle';
 import AllOrdersAdmin from './Components/AllOrdersAdmin';
 import MyOrdersUser from './Components/MyOrdersUser';
 import ActiveOrdersUser from './Components/ActiveOrdersUser';
+import EditArticle from './Components/EditArticle';
+//import EditArticle from './Components/EditArticle';
 
 
 
@@ -39,6 +41,8 @@ const App = () => {
     // Call the logout method passed as a prop
     localStorage.setItem('user',JSON.stringify(updatedUser))
     navigate('/home');
+    //<Route path="/editArticle" element={<EditArticle userId={user.id}/>} />
+
 
   };
   return (
@@ -52,6 +56,7 @@ const App = () => {
       <Route path="/ordersAdmin" element={<AllOrdersAdmin/>} />
       <Route path="/myOrdersUser" element={<MyOrdersUser user={user}/>} />
       <Route path="/activeOrdersUser" element={<ActiveOrdersUser user={user}/>} />
+      <Route path="/editArticle/:articleId" element={<EditArticle user={user}/>}/>
     </Routes>
   );
 }

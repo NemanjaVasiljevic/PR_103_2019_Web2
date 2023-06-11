@@ -76,11 +76,11 @@ namespace PR_103_2019.Controllers
 
         // DELETE: api/Articles/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteArticle(long articleId)
+        public IActionResult DeleteArticle(long Id)
         {
             try
             {
-                _articleService.DeleteArticle(articleId);
+                _articleService.DeleteArticle(Id);
                 return Ok();
             }
             catch (Exception)

@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 const OrderForm = ({ article, quantity, user }) => {
   const [address, setAddress] = useState('');
   const [comment, setComment] = useState('');
+  const navigate = useNavigate();
 
   const orderDto = {
     ArticleQuantity:quantity,
     ArticleId:article.id,
     ArticleName:article.name,
     BuyerName:user.name,
+    SellerName:"",
     BuyerId:user.id,
     Status:1,
     Address:address,
@@ -33,6 +36,8 @@ const OrderForm = ({ article, quantity, user }) => {
       .then(response => {
         // Handle the successful response
         console.log(response.data);
+        //window.alert("Uspesno ste porucili robu pritisnite aktivne porudzbine da vidite");
+        navigate('/activeOrdersUser');
       })
       .catch(error => {
         // Handle the error

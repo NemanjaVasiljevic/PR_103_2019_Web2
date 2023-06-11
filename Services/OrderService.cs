@@ -25,7 +25,7 @@ namespace PR_103_2019.Services
 
             if(buyer == null)
             {
-                return null;
+                throw new ResourceNotFoundException("User with this id does not exist");
             }
             else
             {
@@ -35,9 +35,11 @@ namespace PR_103_2019.Services
             Article article = dbContext.Article.Find(orderDto.ArticleId);
             if(article == null)
             {
-                return null;
+                throw new ResourceNotFoundException("Article with this id does not exist");
             }
 
+            orderDb.SellerId = article.SellerId;
+            orderDb.SellerName = dbContext.User.Find(article.SellerId).Name;
             article.Quantity -= orderDb.ArticleQuantity;
             orderDb.Status = OrderState.RESERVED;
             orderDb.TotalPrice = article.Price * orderDb.ArticleQuantity;
@@ -45,7 +47,7 @@ namespace PR_103_2019.Services
 
             orderDb.OrdredDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, belgradeTimeZone);
             Random rnd = new Random();
-            orderDb.ArrivalDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddMinutes(rnd.Next(1, 60)), belgradeTimeZone);
+            orderDb.ArrivalDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(rnd.Next(1, 48)), belgradeTimeZone);
 
 
 
@@ -59,7 +61,7 @@ namespace PR_103_2019.Services
             catch (Exception)
             {
 
-                return null;
+                throw new ForbiddenActionException();
             }
 
         }
@@ -69,27 +71,33 @@ namespace PR_103_2019.Services
             Order order = dbContext.Order.Find(orderId);
             if(order != null)
             {
-                Article article = dbContext.Article.Find(order.ArticleId);
 
-                if (article == null)
+                //Vreme kada se moze otkazati porudzbina
+                DateTime minAllowedCancelDate = order.OrdredDate.AddHours(1);
+
+                if (DateTime.UtcNow >= minAllowedCancelDate)
                 {
-                    throw new ResourceNotFoundException("Article with specified id doesn't exist!");
-                }
+                    Article article = dbContext.Article.Find(order.ArticleId);
 
-                article.Quantity += order.ArticleQuantity;
-                dbContext.Order.Remove(order);
-                dbContext.SaveChanges();
+                    if (article == null)
+                    {
+                        throw new ResourceNotFoundException("Article with specified id doesn't exist!");
+                    }
+
+                    article.Quantity += order.ArticleQuantity;
+                    dbContext.Order.Remove(order);
+                    dbContext.SaveChanges();
+                }
+                else
+                {
+                    throw new ForbiddenActionException("Order cannot be deleted as it has not reached the minimum allowed order date.");
+                }
             }
         }
 
         public List<OrderDto> GetAllOrders()
         {
             List<OrderDto> res = mapper.Map<List<OrderDto>>(dbContext.Order.ToList());
-            foreach (var item in res)
-            {
-                item.BuyerName = dbContext.User.FirstOrDefault(u => u.Id == item.BuyerId).Name;
-                item.ArticleName = dbContext.Article.FirstOrDefault(a => a.Id == item.ArticleId).Name;
-            }
 
             return res;
         }
@@ -112,9 +120,12 @@ namespace PR_103_2019.Services
                     article.Quantity -= orderDb.ArticleQuantity;
                     orderDb.Status = OrderState.RESERVED;
                     orderDb.TotalPrice = article.Price * orderDb.ArticleQuantity;
-                    orderDb.OrdredDate = DateTime.UtcNow;
+
+                    TimeZoneInfo belgradeTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+
+                    orderDb.OrdredDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, belgradeTimeZone);
                     Random rnd = new Random();
-                    orderDb.ArrivalDate = DateTime.UtcNow.AddMinutes(rnd.Next(60, 240));
+                    orderDb.ArrivalDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(rnd.Next(1, 48)), belgradeTimeZone);
                 }
                 dbContext.SaveChanges();
             }
@@ -124,14 +135,19 @@ namespace PR_103_2019.Services
                 Article newArticle = dbContext.Article.FirstOrDefault(a => a.Id == articleId);
                 if (newArticle != null)
                 {
+                    orderDb.SellerId = newArticle.SellerId;
+                    orderDb.ArticleId = newArticle.Id;
                     if (newArticle.Quantity > orderDb.ArticleQuantity)
                     {
                         newArticle.Quantity -= orderDb.ArticleQuantity;
                         orderDb.Status = OrderState.RESERVED;
                         orderDb.TotalPrice = newArticle.Price * orderDb.ArticleQuantity;
-                        orderDb.OrdredDate = DateTime.UtcNow;
+
+                        TimeZoneInfo belgradeTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+
+                        orderDb.OrdredDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, belgradeTimeZone);
                         Random rnd = new Random();
-                        orderDb.ArrivalDate = DateTime.UtcNow.AddMinutes(rnd.Next(60, 240));
+                        orderDb.ArrivalDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(rnd.Next(1, 48)), belgradeTimeZone);
                     }
                     dbContext.SaveChanges();
                 }

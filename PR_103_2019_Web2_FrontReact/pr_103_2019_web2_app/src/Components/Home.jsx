@@ -124,8 +124,8 @@ const Home = ({ user, onLogout }) => {
     // Role-specific items
     if (user.role === 2) { // prodavac
       items.push(<div key="dodavanje-artikla" onClick={handleAddArticle}>Dodavanje artikla</div>);
-      items.push(<div key="nove-porudzbine">Nove porudzbine</div>);
-      items.push(<div key="moje-porudzbine">Moje porudzbine</div>);
+      items.push(<div key="nove-porudzbine" onClick={handleActiveOrders}>Nove porudzbine</div>);
+      items.push(<div key="moje-porudzbine" onClick={handlePrethodnePorudzbine}>Moje porudzbine</div>);
     } else if (user.role === 1) { // korisnik
       items.push(<div key="nova-porudzbina" onClick={handleNewOrder}>Nova porudzbina</div>);
       items.push(<div key="nova-porudzbina" onClick={handleActiveOrders}>Aktivne porudzbine</div>);

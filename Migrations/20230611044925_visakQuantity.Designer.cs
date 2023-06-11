@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PR_103_2019.Data;
 
@@ -11,9 +12,11 @@ using PR_103_2019.Data;
 namespace PR_103_2019.Migrations
 {
     [DbContext(typeof(PR_103_2019Context))]
-    partial class PR_103_2019ContextModelSnapshot : ModelSnapshot
+    [Migration("20230611044925_visakQuantity")]
+    partial class visakQuantity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,19 +80,11 @@ namespace PR_103_2019.Migrations
                     b.Property<long>("ArticleId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("ArticleName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ArticleQuantity")
                         .HasColumnType("int");
 
                     b.Property<long>("BuyerId")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("BuyerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Comment")
                         .IsRequired()
@@ -97,13 +92,6 @@ namespace PR_103_2019.Migrations
 
                     b.Property<DateTime>("OrdredDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<long>("SellerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("SellerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
