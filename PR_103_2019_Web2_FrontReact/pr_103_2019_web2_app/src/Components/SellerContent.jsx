@@ -11,7 +11,7 @@ const SellerContent = ({ user , articles}) => {
 
   const handleArticleDelete = (Id) => {
     axios
-      .delete(`https://localhost:7100/api/Articles/${Id}`)
+      .delete(`${process.env.REACT_APP_ARTICLES}/${Id}`)
       .then(response => {
         // Handle the successful deletion
         console.log(response.data);

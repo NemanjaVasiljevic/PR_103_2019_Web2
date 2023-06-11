@@ -21,7 +21,7 @@ const AddArticle = ({user}) => {
     };
 
     axios
-      .post('https://localhost:7100/api/Articles', articleData, {params:{sellerId:user.id}})
+      .post(process.env.REACT_APP_ARTICLES, articleData, {params:{sellerId:user.id}})
       .then((response) => {
         console.log('Product successfully created:', response.data);
         navigate('/home');

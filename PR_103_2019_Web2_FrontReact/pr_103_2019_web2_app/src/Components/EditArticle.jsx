@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 const EditArticle = ({ user }) => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [description, setDescription] = useState('');
+  const navigate = useNavigate();
 
   const { articleId } = useParams();
 
@@ -26,12 +27,12 @@ const EditArticle = ({ user }) => {
 
     // Send the updated article data to the server
     axios
-      .put(`https://localhost:7100/api/Articles/${user.id}`, updatedArticle)
+      .put(`${process.env.REACT_APP_ARTICLES}/${user.id}`, updatedArticle)
       .then((response) => {
         // Handle the successful update
         console.log(response.data);
-
-        // Invoke the onArticleUpdated callback to notify the parent component
+        window.alert("Uspesno ste izmenili proizvod");
+        navigate('/home');
       })
       .catch((error) => {
         // Handle any errors that occur during the update
@@ -48,6 +49,7 @@ const EditArticle = ({ user }) => {
           <input
             type="text"
             value={name}
+            placeholder='Unesite nov naziv proizvoda'
             onChange={(event) => setName(event.target.value)}
             className="edit-article-input"
           />

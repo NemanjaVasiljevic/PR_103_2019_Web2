@@ -40,7 +40,7 @@ const getRoleString = (role) => {
       VerificationStatus: 0
     };
     
-    axios.post('https://localhost:7100/api/Users/verify', data)
+    axios.post(process.env.REACT_APP_USER_VERIFY, data)
       .then(response => {
         // Handle the successful verification response
         console.log('User verification successful:', response.data);
@@ -58,7 +58,7 @@ const getRoleString = (role) => {
       VerificationStatus: 1
     };
     
-    axios.post('https://localhost:7100/api/Users/verify', data)
+    axios.post(process.env.REACT_APP_USER_VERIFY, data)
       .then(response => {
         // Handle the successful verification response
         console.log('User verification successful:', response.data);

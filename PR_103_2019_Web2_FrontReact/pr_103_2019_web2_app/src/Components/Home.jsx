@@ -17,7 +17,7 @@ const Home = ({ user, onLogout }) => {
 
     useEffect(() => {
         // Fetch article data from the server
-        axios.get('https://localhost:7100/api/Articles')
+        axios.get(process.env.REACT_APP_ARTICLES)
           .then(response => {
             // Update the articles state with the fetched data
             setArticles(response.data);
@@ -29,7 +29,7 @@ const Home = ({ user, onLogout }) => {
     
       useEffect(() => {
         // Fetch article data from the server
-        axios.get('https://localhost:7100/api/Users')
+        axios.get(process.env.REACT_APP_USERS)
           .then(response => {
             // Update the articles state with the fetched data
             setUsers(response.data);

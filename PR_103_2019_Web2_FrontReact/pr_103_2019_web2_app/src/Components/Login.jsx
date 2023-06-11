@@ -11,7 +11,7 @@ const Login = ({onLogin}) =>{
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.post("https://localhost:7100/api/Users/login", {
+            const response = await axios.post(process.env.REACT_APP_LOGIN_USER, {
               Email: email,
               Password: password
             });
@@ -21,7 +21,7 @@ const Login = ({onLogin}) =>{
               localStorage.setItem('token',result.data);
               console.log("Upao u trazenje emaila:");
               console.log(email);
-              axios.get("https://localhost:7100/api/Users/email",{
+              axios.get(process.env.REACT_APP_GET_USER_BY_EMAIL,{
                     params:{
                         email:email
                     }

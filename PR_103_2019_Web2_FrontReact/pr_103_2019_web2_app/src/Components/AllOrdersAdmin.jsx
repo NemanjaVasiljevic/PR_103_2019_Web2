@@ -13,7 +13,7 @@ const AllOrdersAdmin = () => {
 
     useEffect(() => {
         // Fetch article data from the server
-        axios.get('https://localhost:7100/api/Orders')
+        axios.get(process.env.REACT_APP_GET_ORDERS)
             .then(response => {
             // Update the articles state with the fetched data
             setOrders(response.data);

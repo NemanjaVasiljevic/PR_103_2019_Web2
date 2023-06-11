@@ -20,7 +20,9 @@ const OrderForm = ({ article, quantity, user }) => {
   }
 
   const handleAddressChange = (event) => {
-    setAddress(event.target.value);
+    const newAddress = event.target.value;
+    console.log(newAddress);
+    setAddress(newAddress === '' ? user.address : newAddress);
   };
 
   const handleCommentChange = (event) => {
@@ -32,7 +34,7 @@ const OrderForm = ({ article, quantity, user }) => {
 
 
     // Make the POST request using axios
-    axios.post('https://localhost:7100/api/Orders', orderDto, {params:{userId:user.id}})
+    axios.post(process.env.REACT_APP_GET_ORDERS, orderDto, {params:{userId:user.id}})
       .then(response => {
         // Handle the successful response
         console.log(response.data);

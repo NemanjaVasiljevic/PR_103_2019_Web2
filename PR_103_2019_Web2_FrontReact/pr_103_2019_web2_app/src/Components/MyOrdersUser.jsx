@@ -13,7 +13,7 @@ const MyOrdersUser = ({ user }) => {
   useEffect(() => {
     // Fetch user orders from the server
     axios
-      .get('https://localhost:7100/api/Orders')
+      .get(process.env.REACT_APP_GET_ORDERS)
       .then(response => {
         // Filter orders where arrival date has passed the current moment in time
         let filteredOrders = [];

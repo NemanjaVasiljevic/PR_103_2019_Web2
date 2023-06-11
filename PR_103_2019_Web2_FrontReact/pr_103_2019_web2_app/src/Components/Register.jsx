@@ -35,7 +35,7 @@ function Register(props){
         console.log(userDto.Role);
 
         try{ 
-            axios.post("https://localhost:7100/api/Users", userDto)
+            axios.post(process.env.REACT_APP_USERS, userDto)
             .then((response) =>{
             console.log('Product successfully created:', response.data);
             navigate('/');

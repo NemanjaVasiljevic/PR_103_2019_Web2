@@ -25,7 +25,7 @@ const EditProfile = ({ user, onUpdate }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put(`https://localhost:7100/api/Users/${user.id}`, userDto)
+      .put(`${process.env.REACT_APP_USERS}/${user.id}`, userDto) //iz nekog razloga nece env
       .then((response) => {
         onUpdate(response.data); // Call the onUpdate function with the updated user data
       })

@@ -13,7 +13,7 @@ const ActiveOrdersUser = ({ user }) => {
   useEffect(() => {
     // Fetch user orders from the server
     axios
-      .get('https://localhost:7100/api/Orders')
+      .get(process.env.REACT_APP_GET_ORDERS)
       .then(response => {
         // Filter orders where arrival date has passed the current moment in time
         let filteredOrders = [];
@@ -45,10 +45,10 @@ const ActiveOrdersUser = ({ user }) => {
 
   const handleCancelOrder = orderId => {
     axios
-    .delete(`https://localhost:7100/api/Orders/${orderId}`)
+    .delete(`${process.env.REACT_APP_GET_ORDERS}/${orderId}`)
     .then(response => {
       // Handle the successful cancellation
-      console.log(response.data);
+      window.alert("Porudzbina uspesno otkazana");
       navigate('/home');
     })
     .catch(error => {
